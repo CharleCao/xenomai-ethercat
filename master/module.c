@@ -100,8 +100,11 @@ int __init ec_init_module(void)
     int i, ret = 0;
 
     EC_INFO("Master driver %s\n", EC_MASTER_VERSION);
+
+#ifdef EC_RTDM
     if (!realtime_core_enabled())
         return 0;
+#endif
 
     sema_init(&master_sem, 1);
 
@@ -184,8 +187,10 @@ void __exit ec_cleanup_module(void)
 {
     unsigned int i;
 
+#ifdef EC_RTDM
     if (!realtime_core_enabled())
         return 0;
+#endif
 
     for (i = 0; i < master_count; i++) {
         ec_master_clear(&masters[i]);
